@@ -39,6 +39,10 @@ dependencies:
   flutter_map_marker_cluster: any
   http: ^0.13.5
   dartz: ^0.10.1
+  bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
+  equatable: ^2.0.5
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +64,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

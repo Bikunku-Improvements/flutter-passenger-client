@@ -1,19 +1,13 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:passenger_client/app.dart';
+import 'package:passenger_client/homepage/locator.dart';
+import 'package:passenger_client/passenger_client_observer.dart';
 
 void main() async {
-  runApp(const MyApp());
-}
+  Bloc.observer = PassengerClientObserver();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  await initializeDependencies();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Hello World!',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-    );
-  }
+  runApp(PassengerClientApp());
 }

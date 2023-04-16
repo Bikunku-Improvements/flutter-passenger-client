@@ -3,7 +3,7 @@ import 'dart:convert';
 
 class Terminal {
   final int id;
-  final int distance;
+  final double distance;
   final String name;
   final String next;
   final String route;
@@ -23,7 +23,7 @@ class Terminal {
   factory Terminal.fromMap(Map<String, dynamic> map) {
     return Terminal(
       map['id'] as int,
-      map['distance'] as int,
+      map['distance'].toDouble() as double,
       map['name'] as String,
       map['next'] as String,
       map['route'] as String,

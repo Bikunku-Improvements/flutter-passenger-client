@@ -5,11 +5,11 @@ import '../../common/errors/failure.dart';
 import '../data/terminal.dart';
 
 class TerminalService {
-  final TerminalRepository repository;
+  final TerminalRepository _repository;
 
-  TerminalService(this.repository);
+  TerminalService(this._repository);
 
   Future<Either<Failure, List<Terminal>>> getAllTerminals() async {
-    return await repository.getAll();
+    return await _repository.getAll();
   }
 }
