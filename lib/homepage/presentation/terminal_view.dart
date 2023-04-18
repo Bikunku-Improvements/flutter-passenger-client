@@ -23,24 +23,21 @@ class _TerminalViewState extends State<TerminalView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Passenger Client')),
-        body: BlocBuilder<TerminalCubit, TerminalState>(
-            bloc: _terminalCubit,
-            builder: (context, state) {
-              if (state.isLoadingTerminal) {
-                return const Center(child: CircularProgressIndicator());
-              }
+    return BlocBuilder<TerminalCubit, TerminalState>(
+        bloc: _terminalCubit,
+        builder: (context, state) {
+          if (state.isLoadingTerminal) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: ListView(
-                  children: state.terminalList
-                      .map((terminal) => TerminalItem(terminal: terminal))
-                      .toList(),
-                ),
-              );
-            }));
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: ListView(
+              children: state.terminalList
+                  .map((terminal) => TerminalItem(terminal: terminal))
+                  .toList(),
+            ),
+          );
+        });
   }
 }
