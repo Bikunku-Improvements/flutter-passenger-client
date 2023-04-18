@@ -9,5 +9,5 @@ void main() async {
 
   await initializeDependencies();
 
-  runApp(PassengerClientApp());
+  runApp(const PassengerClientApp());
 }

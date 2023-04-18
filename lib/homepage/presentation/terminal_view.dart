@@ -12,13 +12,13 @@ class TerminalView extends StatefulWidget {
 }
 
 class _TerminalViewState extends State<TerminalView> {
+  late TerminalCubit _terminalCubit;
+
   @override
   void initState() {
+    _terminalCubit = BlocProvider.of<TerminalCubit>(context);
+    _terminalCubit.initTerminalSection();
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final cubit = context.read<TerminalCubit>();
-      cubit.initTerminalSection();
-    });
   }
 
   @override
@@ -26,19 +26,21 @@ class _TerminalViewState extends State<TerminalView> {
     return Scaffold(
         appBar: AppBar(title: const Text('Passenger Client')),
         body: BlocBuilder<TerminalCubit, TerminalState>(
+            bloc: _terminalCubit,
             builder: (context, state) {
-          if (state.isLoadingTerminal) {
-            return const Center(child: CircularProgressIndicator());
-          }
+              if (state.isLoadingTerminal) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            child: ListView(
-              children: state.terminalList
-                  .map((terminal) => TerminalItem(terminal: terminal))
-                  .toList(),
-            ),
-          );
-        }));
+              return Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: ListView(
+                  children: state.terminalList
+                      .map((terminal) => TerminalItem(terminal: terminal))
+                      .toList(),
+                ),
+              );
+            }));
   }
 }
