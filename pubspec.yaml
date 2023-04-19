@@ -45,6 +45,7 @@ dependencies:
   get_it: ^7.2.0
   google_fonts: ^4.0.3
   flutter_svg: ^2.0.5
+  google_maps_flutter: ^2.2.5
 
 dev_dependencies:
   flutter_test:
