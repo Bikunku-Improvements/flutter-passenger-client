@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:passenger_client/api/homepage.dart' as homepage_urls;
 import 'package:passenger_client/homepage/data/terminal.dart';
