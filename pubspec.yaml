@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^4.0.3
   flutter_svg: ^2.0.5
   google_maps_flutter: ^2.2.5
+  flutter_polyline_points: ^1.0.0
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:passenger_client/common/routing/routing_list.dart';
 import 'package:passenger_client/homepage/blocs/map_state.dart';
 import 'package:passenger_client/homepage/presentation/widgets/home_map_marker.dart';
 
@@ -19,8 +21,13 @@ class HomeMap extends StatefulWidget {
 class _HomeMapState extends State<HomeMap> {
   late GoogleMapController mapController;
   late Map<String, BitmapDescriptor> terminalIcons;
-
   late MapCubit _mapCubit;
+
+  final Set<Polyline> _polylines = {};
+  final String routeType = "mix";
+  PolylinePoints polylinePoints = PolylinePoints();
+  // TODO: Put this in secret env
+  String googleMapsAPIKey = "AIzaSyDwsrdg0JBptnRpWs8O465B1jVCsHGtZF8";
 
   // MS: Koordinat Stasiun UI
   final LatLng _center = const LatLng(-6.361046716889507, 106.8317240044786);
@@ -30,6 +37,7 @@ class _HomeMapState extends State<HomeMap> {
     _mapCubit = BlocProvider.of<MapCubit>(context);
     _mapCubit.initTerminalLocation();
     addCustomTerminalIcons();
+    setPolylines();
     super.initState();
   }
 
@@ -38,6 +46,7 @@ class _HomeMapState extends State<HomeMap> {
     changeMapMode(mapController);
   }
 
+  // ----- LOGIC FOR MARKER ICONS -----
   void addCustomTerminalIcons() async {
     Map<String, BitmapDescriptor> newTerminalIcons = {
       'blue': await BitmapDescriptor.fromAssetImage(
@@ -54,24 +63,53 @@ class _HomeMapState extends State<HomeMap> {
       terminalIcons = newTerminalIcons;
     });
   }
+  // ----- END FOR LOGIC FOR MARKER ICONS -----
 
-//this is the function to load custom map style json
+  // ----- LOGIC FOR GMAPS STYLE JSON  -----
   void changeMapMode(GoogleMapController mapController) {
     getJsonFile("assets/json/map_style.json")
         .then((value) => setMapStyle(value, mapController));
   }
 
-  //helper function
+  // helper function
   void setMapStyle(String mapStyle, GoogleMapController mapController) {
     mapController.setMapStyle(mapStyle);
   }
 
-  //helper function
+  // helper function
   Future<String> getJsonFile(String path) async {
     ByteData byte = await rootBundle.load(path);
     var list = byte.buffer.asUint8List(byte.offsetInBytes, byte.lengthInBytes);
     return utf8.decode(list);
   }
+  // ----- END FOR LOGIC FOR GMAPS STYLE JSON  -----
+
+  // ----- LOGIC FOR POLYLINES DRAWING -----
+  void setPolylines() async {
+    List<LatLng> polylineCoordinates = [];
+    for (var i = 0; i < routingRedOnly.length - 1; i++) {
+      LatLng src = routingRedOnly[i];
+      LatLng dest = routingRedOnly[i + 1];
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+          googleMapsAPIKey,
+          PointLatLng(src.latitude, src.longitude),
+          PointLatLng(dest.latitude, dest.longitude));
+      if (result.points.isNotEmpty) {
+        for (var point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        }
+      }
+    }
+    setState(() {
+      Polyline polyline = Polyline(
+          polylineId: const PolylineId("red"),
+          color: const Color.fromARGB(255, 242, 88, 88),
+          width: 4,
+          points: polylineCoordinates);
+      _polylines.add(polyline);
+    });
+  }
+  // ----- END FOR LOGIC FOR POLYLINES DRAWING -----
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +126,7 @@ class _HomeMapState extends State<HomeMap> {
           initialCameraPosition: CameraPosition(target: _center, zoom: 17),
           markers: terminalLocationMarkers,
           zoomControlsEnabled: false,
+          polylines: _polylines,
         );
       },
     );
