@@ -18,12 +18,36 @@ class HomeMap extends StatefulWidget {
   State<HomeMap> createState() => _HomeMapState();
 }
 
+const Map<String, List<String>> mapRouteTypeToRoutingType = {
+  'mix': [
+    'red',
+    'blue_mix_inner',
+    'blue_mix_outer',
+  ],
+  'red': ['red'],
+  'blue': ['blue']
+};
+
+Map<String, List<LatLng>> mapRoutingTypeToList = {
+  'red': routingRedOnly,
+  'blue': routingBlueOnly,
+  'blue_mix_outer': routingBlueMixOuterRingRoad,
+  'blue_mix_inner': routingBlueMixInnerRingRoad
+};
+
+Map<String, Color> mapRoutingTypeToColor = {
+  'red': const Color.fromARGB(255, 242, 88, 88),
+  'blue': const Color.fromARGB(255, 113, 168, 250),
+  'blue_mix_inner': const Color.fromARGB(255, 113, 168, 250),
+  'blue_mix_outer': const Color.fromARGB(255, 113, 168, 250)
+};
+
 class _HomeMapState extends State<HomeMap> {
   late GoogleMapController mapController;
   late Map<String, BitmapDescriptor> terminalIcons;
   late MapCubit _mapCubit;
 
-  final Set<Polyline> _polylines = {};
+  Set<Polyline> _polylines = {};
   final String routeType = "mix";
   PolylinePoints polylinePoints = PolylinePoints();
   // TODO: Put this in secret env
@@ -86,27 +110,45 @@ class _HomeMapState extends State<HomeMap> {
 
   // ----- LOGIC FOR POLYLINES DRAWING -----
   void setPolylines() async {
-    List<LatLng> polylineCoordinates = [];
-    for (var i = 0; i < routingRedOnly.length - 1; i++) {
-      LatLng src = routingRedOnly[i];
-      LatLng dest = routingRedOnly[i + 1];
-      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-          googleMapsAPIKey,
-          PointLatLng(src.latitude, src.longitude),
-          PointLatLng(dest.latitude, dest.longitude));
-      if (result.points.isNotEmpty) {
-        for (var point in result.points) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+    List<String> routingTypes = mapRouteTypeToRoutingType[routeType]!;
+    List<List<LatLng>> routingListOfList = routingTypes
+        .map((routingType) => mapRoutingTypeToList[routingType]!)
+        .toList();
+
+    Set<Polyline> polylines = {};
+
+    for (var i = 0; i < routingListOfList.length; i++) {
+      String routingType = routingTypes[i];
+      List<LatLng> routingList = routingListOfList[i];
+      List<LatLng> polylineCoordinates = [];
+      for (var j = 0; j < routingList.length - 1; j++) {
+        LatLng src = routingList[j];
+        LatLng dest = routingList[j + 1];
+        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+            googleMapsAPIKey,
+            PointLatLng(src.latitude, src.longitude),
+            PointLatLng(dest.latitude, dest.longitude));
+        if (result.points.isNotEmpty) {
+          for (var point in result.points) {
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          }
         }
       }
-    }
-    setState(() {
-      Polyline polyline = Polyline(
-          polylineId: const PolylineId("red"),
-          color: const Color.fromARGB(255, 242, 88, 88),
+      polylines.add(Polyline(
+          polylineId: PolylineId(routingType),
+          color: mapRoutingTypeToColor[routingType]!,
           width: 4,
-          points: polylineCoordinates);
-      _polylines.add(polyline);
+          patterns: routingType == "blue_mix_inner" && routeType == 'mix'
+              ? [
+                  PatternItem.dash(15),
+                  PatternItem.gap(30),
+                ]
+              : [],
+          points: polylineCoordinates));
+    }
+
+    setState(() {
+      _polylines = polylines;
     });
   }
   // ----- END FOR LOGIC FOR POLYLINES DRAWING -----
