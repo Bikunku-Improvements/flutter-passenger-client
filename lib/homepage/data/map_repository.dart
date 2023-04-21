@@ -1,6 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:passenger_client/homepage/data/map_api.dart';
-import 'package:passenger_client/homepage/data/terminal_api.dart';
 import 'package:passenger_client/homepage/data/terminal_location.dart';
 
 class MapRepository {
