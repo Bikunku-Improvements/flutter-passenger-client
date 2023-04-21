@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:passenger_client/homepage/blocs/map_state.dart';
 import 'package:passenger_client/homepage/domain/map_service.dart';
@@ -22,6 +23,7 @@ class MapCubit extends Cubit<MapState> {
 
   MapCubit(this._mapService) : super(const MapState());
 
+  // ----- LOGIC FOR INITIALIZING LOCATION MARKERS -----
   void initTerminalLocationMarkers() async {
     final response = _mapService.getTerminalLocations("mix");
 
@@ -124,4 +126,61 @@ class MapCubit extends Cubit<MapState> {
       return BitmapDescriptor.defaultMarker;
     }
   }
+  // ----- END FOR LOGIC FOR INITIALIZING LOCATION MARKERS -----
+
+  // ----- LOGIC FOR INITIALIZING POLYLINES -----
+  void initRoutingPolylines(String routeType) async {
+    Map<String, Color> mapRoutingTypeToColor = {
+      'red': const Color.fromARGB(255, 242, 88, 88),
+      'blue': const Color.fromARGB(255, 113, 168, 250),
+      'blue_mix_inner': const Color.fromARGB(255, 113, 168, 250),
+      'blue_mix_outer': const Color.fromARGB(255, 113, 168, 250)
+    };
+
+    PolylinePoints polylinePoints = PolylinePoints();
+    Set<Polyline> polylines = {};
+
+    // TODO: Put this in secret env
+    String googleMapsAPIKey = "AIzaSyDwsrdg0JBptnRpWs8O465B1jVCsHGtZF8";
+
+    List<String> routingTypes =
+        _mapService.listRoutingTypesFromRouteType(routeType);
+    List<List<LatLng>> routingList =
+        _mapService.listRoutingsFromRouteType(routeType);
+
+    for (var i = 0; i < routingList.length; i++) {
+      String routingType = routingTypes[i];
+      List<LatLng> routing = routingList[i];
+      List<LatLng> polylineCoordinates = [];
+      for (var j = 0; j < routing.length - 1; j++) {
+        LatLng src = routing[j];
+        LatLng dest = routing[j + 1];
+
+        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+            googleMapsAPIKey,
+            PointLatLng(src.latitude, src.longitude),
+            PointLatLng(dest.latitude, dest.longitude));
+
+        if (result.points.isNotEmpty) {
+          for (var point in result.points) {
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          }
+        }
+      }
+      polylines.add(Polyline(
+          polylineId: PolylineId(routingType),
+          color: mapRoutingTypeToColor[routingType]!,
+          width: 4,
+          patterns: routingType == "blue_mix_inner" && routeType == 'mix'
+              ? [
+                  PatternItem.dash(15),
+                  PatternItem.gap(30),
+                ]
+              : [],
+          points: polylineCoordinates));
+    }
+
+    emit(state.copyWith(polylines: polylines));
+  }
+  // ----- END FOR LOGIC FOR INITIALIZING POLYLINES -----
 }

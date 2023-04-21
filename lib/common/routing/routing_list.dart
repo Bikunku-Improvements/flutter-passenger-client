@@ -25,3 +25,10 @@ List<LatLng> routingBlueMixOuterRingRoad = [
   const LatLng(-6.370075618390656, 106.8308615746626),
   const LatLng(-6.362850786328479, 106.83116675399012),
 ];
+
+Map<String, List<LatLng>> mapRoutingTypeToList = {
+  'red': routingRedOnly,
+  'blue': routingBlueOnly,
+  'blue_mix_outer': routingBlueMixOuterRingRoad,
+  'blue_mix_inner': routingBlueMixInnerRingRoad
+};
