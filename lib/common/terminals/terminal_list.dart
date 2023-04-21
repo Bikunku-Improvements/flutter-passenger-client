@@ -62,12 +62,12 @@ List<TerminalLocation> terminalBlue = [
 List<TerminalLocation> terminalMix = [
   TerminalLocation(
       'Asrama UI', const LatLng(-6.348373127525387, 106.8297679527903), 'mix'),
+  TerminalLocation('Stasiun UI',
+      const LatLng(-6.36086929545325, 106.83146112622818), 'mix', 1),
+  TerminalLocation('Stasiun UI',
+      const LatLng(-6.361046716889507, 106.8317240044786), 'mix', 2),
   TerminalLocation(
-      'Stasiun UI', const LatLng(-6.36086929545325, 106.83146112622818), 'mix'),
+      'Menwa', const LatLng(-6.353465386293707, 106.83182325822173), 'mix', 1),
   TerminalLocation(
-      'Stasiun UI', const LatLng(-6.361046716889507, 106.8317240044786), 'mix'),
-  TerminalLocation(
-      'Menwa', const LatLng(-6.353465386293707, 106.83182325822173), 'mix'),
-  TerminalLocation(
-      'Menwa', const LatLng(-6.3534610177474, 106.83162029695444), 'mix')
+      'Menwa', const LatLng(-6.3534610177474, 106.83162029695444), 'mix', 2)
 ];

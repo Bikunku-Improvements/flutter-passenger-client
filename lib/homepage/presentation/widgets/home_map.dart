@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +11,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:passenger_client/common/routing/routing_list.dart';
 import 'package:passenger_client/homepage/blocs/map_state.dart';
-import 'package:passenger_client/homepage/presentation/widgets/home_map_marker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../blocs/map_cubit.dart';
 
@@ -44,7 +48,6 @@ Map<String, Color> mapRoutingTypeToColor = {
 
 class _HomeMapState extends State<HomeMap> {
   late GoogleMapController mapController;
-  late Map<String, BitmapDescriptor> terminalIcons;
   late MapCubit _mapCubit;
 
   Set<Polyline> _polylines = {};
@@ -59,8 +62,7 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     _mapCubit = BlocProvider.of<MapCubit>(context);
-    _mapCubit.initTerminalLocation();
-    addCustomTerminalIcons();
+    _mapCubit.initTerminalLocationMarkers();
     setPolylines();
     super.initState();
   }
@@ -69,25 +71,6 @@ class _HomeMapState extends State<HomeMap> {
     mapController = controller;
     changeMapMode(mapController);
   }
-
-  // ----- LOGIC FOR MARKER ICONS -----
-  void addCustomTerminalIcons() async {
-    Map<String, BitmapDescriptor> newTerminalIcons = {
-      'blue': await BitmapDescriptor.fromAssetImage(
-          const ImageConfiguration(size: Size(50, 50)),
-          'assets/icons/blue-terminal.png'),
-      'red': await BitmapDescriptor.fromAssetImage(
-          const ImageConfiguration(size: Size(50, 50)),
-          'assets/icons/red-terminal.png'),
-      'mix': await BitmapDescriptor.fromAssetImage(
-          const ImageConfiguration(size: Size(50, 50)),
-          'assets/icons/mix-terminal.png'),
-    };
-    setState(() {
-      terminalIcons = newTerminalIcons;
-    });
-  }
-  // ----- END FOR LOGIC FOR MARKER ICONS -----
 
   // ----- LOGIC FOR GMAPS STYLE JSON  -----
   void changeMapMode(GoogleMapController mapController) {
@@ -157,16 +140,10 @@ class _HomeMapState extends State<HomeMap> {
   Widget build(BuildContext context) {
     return BlocBuilder<MapCubit, MapState>(
       builder: (context, state) {
-        Set<Marker> terminalLocationMarkers = state.terminalLocationList
-            .map((terminalLocation) => homeMapMarker(
-                terminalLocation.latLng,
-                "${terminalLocation.name}-${terminalLocation.route}",
-                terminalIcons[terminalLocation.route]!))
-            .toSet();
         return GoogleMap(
           onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(target: _center, zoom: 17),
-          markers: terminalLocationMarkers,
+          initialCameraPosition: CameraPosition(target: _center, zoom: 18),
+          markers: state.terminalLocationMarkers,
           zoomControlsEnabled: false,
           polylines: _polylines,
         );

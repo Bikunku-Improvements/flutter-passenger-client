@@ -4,6 +4,7 @@ class TerminalLocation {
   final String name;
   final LatLng latLng;
   final String route;
+  final int? multiplier;
 
-  TerminalLocation(this.name, this.latLng, this.route);
+  TerminalLocation(this.name, this.latLng, this.route, [this.multiplier]);
 }

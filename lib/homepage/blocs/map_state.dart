@@ -1,23 +1,22 @@
 import 'package:equatable/equatable.dart';
-
-import '../data/terminal_location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapState extends Equatable {
-  final List<TerminalLocation> terminalLocationList;
+  final Set<Marker> terminalLocationMarkers;
 
   const MapState({
-    this.terminalLocationList = const [],
+    this.terminalLocationMarkers = const {},
   });
 
   MapState copyWith({
-    List<TerminalLocation>? terminalLocationList,
+    Set<Marker>? terminalLocationMarkers,
   }) =>
       MapState(
-          terminalLocationList:
-              terminalLocationList ?? this.terminalLocationList);
+          terminalLocationMarkers:
+              terminalLocationMarkers ?? this.terminalLocationMarkers);
 
   @override
   List<Object?> get props => [
-        terminalLocationList,
+        terminalLocationMarkers,
       ];
 }
