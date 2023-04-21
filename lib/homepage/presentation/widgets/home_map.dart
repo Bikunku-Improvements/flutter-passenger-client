@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:passenger_client/common/routing/routing_list.dart';
 import 'package:passenger_client/homepage/blocs/map_state.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../blocs/map_cubit.dart';
 
@@ -21,30 +15,6 @@ class HomeMap extends StatefulWidget {
   @override
   State<HomeMap> createState() => _HomeMapState();
 }
-
-const Map<String, List<String>> mapRouteTypeToRoutingType = {
-  'mix': [
-    'red',
-    'blue_mix_inner',
-    'blue_mix_outer',
-  ],
-  'red': ['red'],
-  'blue': ['blue']
-};
-
-Map<String, List<LatLng>> mapRoutingTypeToList = {
-  'red': routingRedOnly,
-  'blue': routingBlueOnly,
-  'blue_mix_outer': routingBlueMixOuterRingRoad,
-  'blue_mix_inner': routingBlueMixInnerRingRoad
-};
-
-Map<String, Color> mapRoutingTypeToColor = {
-  'red': const Color.fromARGB(255, 242, 88, 88),
-  'blue': const Color.fromARGB(255, 113, 168, 250),
-  'blue_mix_inner': const Color.fromARGB(255, 113, 168, 250),
-  'blue_mix_outer': const Color.fromARGB(255, 113, 168, 250)
-};
 
 class _HomeMapState extends State<HomeMap> {
   late GoogleMapController mapController;
