@@ -1,17 +1,16 @@
 import 'package:equatable/equatable.dart';
-
-import '../data/bikun.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class BikunState extends Equatable {
-  final List<Bikun> bikunList;
+  final Set<Marker> bikunMarkers;
 
-  const BikunState({this.bikunList = const []});
+  const BikunState({this.bikunMarkers = const {}});
 
   BikunState copyWith({
-    List<Bikun>? bikunList,
+    Set<Marker>? bikunMarkers,
   }) =>
-      BikunState(bikunList: bikunList ?? this.bikunList);
+      BikunState(bikunMarkers: bikunMarkers ?? this.bikunMarkers);
 
   @override
-  List<Object?> get props => [bikunList];
+  List<Object?> get props => [bikunMarkers];
 }

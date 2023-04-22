@@ -16,5 +16,5 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(119);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

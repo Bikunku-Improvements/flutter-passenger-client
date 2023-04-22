@@ -31,7 +31,6 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     _bikunCubit = BlocProvider.of<BikunCubit>(context);
-
     _mapCubit = BlocProvider.of<MapCubit>(context);
     _mapCubit.initTerminalLocationMarkers();
     _mapCubit.initRoutingPolylines(routeType);
@@ -77,7 +76,10 @@ class _HomeMapState extends State<HomeMap> {
                   onMapCreated: _onMapCreated,
                   initialCameraPosition:
                       CameraPosition(target: _center, zoom: 17),
-                  markers: mapState.terminalLocationMarkers,
+                  markers: {
+                    ...mapState.terminalLocationMarkers,
+                    ...bikunState.bikunMarkers
+                  },
                   zoomControlsEnabled: false,
                   polylines: mapState.polylines,
                 );
