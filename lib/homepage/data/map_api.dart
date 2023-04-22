@@ -5,7 +5,7 @@ import 'package:passenger_client/homepage/data/terminal_location.dart';
 import '../../common/routing/routing_list.dart';
 
 class MapApi {
-  static List<TerminalLocation> listTerminalLocations(String route) {
+  List<TerminalLocation> listTerminalLocations(String route) {
     if (route == 'red') {
       return terminalRed;
     } else if (route == 'blue') {
@@ -15,7 +15,7 @@ class MapApi {
     }
   }
 
-  static List<LatLng> listRouting(String routingType) {
+  List<LatLng> listRouting(String routingType) {
     if (routingType == 'red') {
       return routingRedOnly;
     } else if (routingType == 'blue') {

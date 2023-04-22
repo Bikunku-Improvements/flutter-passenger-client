@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:passenger_client/homepage/blocs/bikun_cubit.dart';
+import 'package:passenger_client/homepage/blocs/bikun_state.dart';
 import 'package:passenger_client/homepage/blocs/map_state.dart';
 
 import '../../blocs/map_cubit.dart';
@@ -19,6 +21,7 @@ class HomeMap extends StatefulWidget {
 class _HomeMapState extends State<HomeMap> {
   late GoogleMapController mapController;
   late MapCubit _mapCubit;
+  late BikunCubit _bikunCubit;
 
   final String routeType = "mix";
 
@@ -27,6 +30,8 @@ class _HomeMapState extends State<HomeMap> {
 
   @override
   void initState() {
+    _bikunCubit = BlocProvider.of<BikunCubit>(context);
+
     _mapCubit = BlocProvider.of<MapCubit>(context);
     _mapCubit.initTerminalLocationMarkers();
     _mapCubit.initRoutingPolylines(routeType);
@@ -58,17 +63,25 @@ class _HomeMapState extends State<HomeMap> {
   // ----- END FOR LOGIC FOR GMAPS STYLE JSON  -----
 
   @override
+  void dispose() {
+    super.dispose();
+    _bikunCubit.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MapCubit, MapState>(
-      builder: (context, state) {
-        return GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(target: _center, zoom: 17),
-          markers: state.terminalLocationMarkers,
-          zoomControlsEnabled: false,
-          polylines: state.polylines,
-        );
-      },
-    );
+    return BlocBuilder<BikunCubit, BikunState>(
+        builder: (bikunContext, bikunState) => BlocBuilder<MapCubit, MapState>(
+              builder: (mapContext, mapState) {
+                return GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition:
+                      CameraPosition(target: _center, zoom: 17),
+                  markers: mapState.terminalLocationMarkers,
+                  zoomControlsEnabled: false,
+                  polylines: mapState.polylines,
+                );
+              },
+            ));
   }
 }

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TerminalLocation {
@@ -7,4 +8,9 @@ class TerminalLocation {
   final int? multiplier;
 
   TerminalLocation(this.name, this.latLng, this.route, [this.multiplier]);
+
+  @override
+  String toString() {
+    return 'TerminalLocation(name: $name, latLng: $latLng, route: $route, multiplier: $multiplier)';
+  }
 }
