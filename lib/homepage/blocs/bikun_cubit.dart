@@ -82,21 +82,21 @@ class BikunCubit extends Cubit<BikunState> {
     return BitmapDescriptor.fromBytes(data);
   }
 
-  Future<File> _getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load(path);
-
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.create(recursive: true);
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
-    return file;
+  Future<Uint8List> _getBytesFromAsset(
+    String path,
+  ) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+    );
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 
   Future<ui.Image> _getImageFromPath(String imagePath) async {
-    File imageFile = await _getImageFileFromAssets(imagePath);
-
-    Uint8List imageBytes = imageFile.readAsBytesSync();
+    Uint8List imageBytes = await _getBytesFromAsset(imagePath);
 
     final Completer<ui.Image> completer = Completer();
 
