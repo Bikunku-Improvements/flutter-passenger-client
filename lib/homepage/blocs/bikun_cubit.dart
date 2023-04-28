@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:bloc/bloc.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:passenger_client/homepage/blocs/bikun_state.dart';
 import 'package:passenger_client/homepage/domain/bikun_service.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../common/colors/colors.dart';
 
