@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passenger_client/homepage/blocs/bikun_cubit.dart';
 import 'package:passenger_client/homepage/blocs/map_cubit.dart';
-import 'package:passenger_client/homepage/domain/bikun_service.dart';
-import 'package:passenger_client/homepage/domain/map_service.dart';
 import 'package:passenger_client/homepage/presentation/home_page.dart';
+
+import 'homepage/domain/services/bikun_service.dart';
+import 'homepage/domain/services/map_service.dart';
 
 import 'homepage/locator.dart';
 

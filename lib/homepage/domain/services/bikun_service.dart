@@ -1,5 +1,5 @@
-import 'package:passenger_client/homepage/data/bikun.dart';
-import 'package:passenger_client/homepage/data/bikun_repository.dart';
+import 'package:passenger_client/homepage/data/models/bikun.dart';
+import 'package:passenger_client/homepage/domain/repositories/bikun_repository.dart';
 
 class BikunService {
   final BikunRepository _repository;

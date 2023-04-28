@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:passenger_client/homepage/blocs/map_state.dart';
-import 'package:passenger_client/homepage/domain/map_service.dart';
+import 'package:passenger_client/homepage/domain/services/map_service.dart';
 
 const routeMapToIconPath = {
   'blue': 'assets/icons/blue-terminal.png',

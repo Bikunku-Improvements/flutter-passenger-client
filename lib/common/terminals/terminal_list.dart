@@ -1,5 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:passenger_client/homepage/data/terminal_location.dart';
+import 'package:passenger_client/homepage/data/models/terminal_location.dart';
 
 List<TerminalLocation> terminalRed = [
   TerminalLocation(

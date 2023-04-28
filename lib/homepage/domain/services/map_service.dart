@@ -1,6 +1,7 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:passenger_client/homepage/data/map_repository.dart';
-import 'package:passenger_client/homepage/data/terminal_location.dart';
+
+import 'package:passenger_client/homepage/data/models/terminal_location.dart';
+import 'package:passenger_client/homepage/domain/repositories/map_repository.dart';
 
 class MapService {
   final MapRepository _repository;
@@ -8,7 +9,7 @@ class MapService {
   MapService(this._repository);
 
   List<TerminalLocation> getTerminalLocations(String route) {
-    return _repository.listTerminallocations(route);
+    return _repository.listTerminalLocations(route);
   }
 
   List<String> listRoutingTypesFromRouteType(String routeType) {

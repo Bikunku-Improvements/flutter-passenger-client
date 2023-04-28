@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:passenger_client/homepage/blocs/bikun_state.dart';
-import 'package:passenger_client/homepage/domain/bikun_service.dart';
+import 'package:passenger_client/homepage/domain/services/bikun_service.dart';
 
 import '../../common/colors/colors.dart';
 
