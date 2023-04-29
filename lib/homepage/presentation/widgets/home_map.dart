@@ -82,6 +82,8 @@ class _HomeMapState extends State<HomeMap> {
                   },
                   zoomControlsEnabled: false,
                   polylines: mapState.polylines,
+                  myLocationEnabled: false,
+                  myLocationButtonEnabled: false,
                 );
               },
             ));
