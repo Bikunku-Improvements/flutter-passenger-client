@@ -1,6 +1,8 @@
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get_it/get_it.dart';
 import 'package:passenger_client/homepage/data/datasources/bikun_remote_data_source.dart';
 import 'package:passenger_client/homepage/data/datasources/map_local_data_source.dart';
+import 'package:passenger_client/homepage/data/datasources/map_remote_data_source.dart';
 import 'package:passenger_client/homepage/data/repositories/bikun_repository_impl.dart';
 import 'package:passenger_client/homepage/data/repositories/map_repository_impl.dart';
 import 'package:passenger_client/homepage/domain/repositories/bikun_repository.dart';
@@ -12,8 +14,10 @@ final locator = GetIt.instance;
 
 Future<void> initializeDependencies() async {
   locator.registerSingleton<MapLocalDataSource>(MapLocalDataSourceImpl());
-  locator.registerSingleton<MapRepository>(
-      MapRepositoryImpl(locator<MapLocalDataSource>()));
+  locator.registerSingleton<MapRemoteDataSource>(
+      MapRemoteDataSourceImpl(PolylinePoints()));
+  locator.registerSingleton<MapRepository>(MapRepositoryImpl(
+      locator<MapLocalDataSource>(), locator<MapRemoteDataSource>()));
   locator.registerSingleton<MapService>(MapService(locator<MapRepository>()));
 
   locator.registerSingleton<BikunRemoteDataSource>(BikunRemoteDataSourceImpl());

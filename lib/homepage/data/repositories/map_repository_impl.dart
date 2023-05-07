@@ -1,4 +1,6 @@
+import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:passenger_client/homepage/data/datasources/map_remote_data_source.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'package:passenger_client/homepage/data/datasources/map_local_data_source.dart';
@@ -7,10 +9,11 @@ import 'package:passenger_client/homepage/domain/repositories/map_repository.dar
 
 class MapRepositoryImpl implements MapRepository {
   final MapLocalDataSource _mapLocalDataSource;
+  final MapRemoteDataSource _mapRemoteDataSource;
 
   late WebSocketChannel listAllBikunChannel;
 
-  MapRepositoryImpl(this._mapLocalDataSource);
+  MapRepositoryImpl(this._mapLocalDataSource, this._mapRemoteDataSource);
 
   @override
   List<LatLng> listRoutingsFromRouteType(String routeType) {
@@ -20,5 +23,11 @@ class MapRepositoryImpl implements MapRepository {
   @override
   List<TerminalLocation> listTerminalLocations(String route) {
     return _mapLocalDataSource.listTerminalLocations(route);
+  }
+
+  @override
+  Future<PolylineResult> getRouteBetweenCoordinates(
+      LatLng src, LatLng dest) async {
+    return await _mapRemoteDataSource.getRouteBetweenCoordinates(src, dest);
   }
 }

@@ -135,11 +135,7 @@ class MapCubit extends Cubit<MapState> {
       'blue_mix_outer': const Color.fromARGB(255, 113, 168, 250)
     };
 
-    PolylinePoints polylinePoints = PolylinePoints();
     Set<Polyline> polylines = {};
-
-    // TODO: Put this in secret env
-    String googleMapsAPIKey = "AIzaSyDwsrdg0JBptnRpWs8O465B1jVCsHGtZF8";
 
     List<String> routingTypes =
         _mapService.listRoutingTypesFromRouteType(routeType);
@@ -154,10 +150,8 @@ class MapCubit extends Cubit<MapState> {
         LatLng src = routing[j];
         LatLng dest = routing[j + 1];
 
-        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-            googleMapsAPIKey,
-            PointLatLng(src.latitude, src.longitude),
-            PointLatLng(dest.latitude, dest.longitude));
+        PolylineResult result =
+            await _mapService.getRouteBetweenCoordinates(src, dest);
 
         if (result.points.isNotEmpty) {
           for (var point in result.points) {
