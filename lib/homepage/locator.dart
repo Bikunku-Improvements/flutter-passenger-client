@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get_it/get_it.dart';
 import 'package:passenger_client/homepage/data/datasources/bikun_remote_data_source.dart';
+import 'package:passenger_client/homepage/data/datasources/bikun_remote_data_source_firebase_impl.dart';
+import 'package:passenger_client/homepage/data/datasources/bikun_remote_data_source_websocket_impl.dart';
 import 'package:passenger_client/homepage/data/datasources/map_local_data_source.dart';
 import 'package:passenger_client/homepage/data/datasources/map_remote_data_source.dart';
 import 'package:passenger_client/homepage/data/repositories/bikun_repository_impl.dart';
@@ -20,9 +23,14 @@ Future<void> initializeDependencies() async {
       locator<MapLocalDataSource>(), locator<MapRemoteDataSource>()));
   locator.registerSingleton<MapService>(MapService(locator<MapRepository>()));
 
-  locator.registerSingleton<BikunRemoteDataSource>(BikunRemoteDataSourceImpl());
+  // MS: Change this if the tracking is changed
+  locator.registerSingleton<BikunRemoteDataSource>(
+      BikunRemoteDataSourceFirebaseImpl());
+
   locator.registerSingleton<BikunRepository>(
       BikunRepositoryImpl(locator<BikunRemoteDataSource>()));
   locator.registerSingleton<BikunService>(
       BikunService(locator<BikunRepository>()));
+
+  locator.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
 }
