@@ -7,7 +7,7 @@ import 'package:passenger_client/homepage/data/datasources/bikun_remote_data_sou
 import 'package:passenger_client/homepage/data/models/bikun.dart';
 import 'package:passenger_client/homepage/locator.dart';
 
-// TODO: where tf do i put this
+// TODO: where do i put this
 class Bus {
   final int number;
   final bool isActive;
@@ -85,8 +85,7 @@ class BikunRemoteDataSourceFirebaseImpl implements BikunRemoteDataSource {
   Stream<List<Bikun>> getListAllBikunChannel() async* {
     var db = locator<FirebaseFirestore>();
 
-    // TODO: Rework this, might be missing something because all of this below doesn't execute --"
-
+    // TODO: See whether this works or not, if not, try checking: https://stackoverflow.com/questions/70137404/how-to-return-a-stream-based-on-another-streams-event?rq=1
     var collectionBusRef = db.collection('buses');
     await for (var response in collectionBusRef.snapshots()) {
       Map<int, Bus> busMap = {};
@@ -116,8 +115,6 @@ class BikunRemoteDataSourceFirebaseImpl implements BikunRemoteDataSource {
                 timestamp: location.timestamp));
           }
         }
-
-        print("bikunList: $bikunList");
 
         yield* Stream.value(bikunList);
       }
