@@ -1,0 +1,23 @@
+syntax="proto3";
+package proto;
+option go_package="./pb";
+
+service Location {
+  rpc SubscribeLocation(SubscribeLocationRequest)  returns (stream SubscribeLocationResponse) {}
+}
+
+message SubscribeLocationRequest {}
+
+message SubscribeLocationResponse {
+  uint64 bus_id = 1;
+  int64 number = 2;
+  string plate = 3;
+  string status = 4;
+  string route = 5;
+  bool is_active = 6;
+  float long = 7;
+  float lat = 8;
+  float speed = 9;
+  float heading = 10;
+  string created_at = 11;
+}

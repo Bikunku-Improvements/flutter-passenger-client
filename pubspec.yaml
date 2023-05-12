@@ -49,6 +49,8 @@ dependencies:
   web_socket_channel: ^2.4.0
   cloud_firestore: ^4.6.0
   firebase_core: ^2.11.0
+  grpc: ^3.1.0
+  protobuf: ^2.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:passenger_client/api/homepage.dart' as homepage_url;
+import 'package:passenger_client/api/ws/homepage.dart' as homepage_url;
 
 import '../models/bikun.dart';
 import 'bikun_remote_data_source.dart';
