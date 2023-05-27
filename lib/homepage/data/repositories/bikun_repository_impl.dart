@@ -13,7 +13,7 @@ class BikunRepositoryImpl implements BikunRepository {
   }
 
   @override
-  Stream<List<Bikun>> getAllBikun() {
-    return _bikunRemoteDataSource.getListAllBikunChannel();
+  Stream<Bikun> getNewBikun() {
+    return _bikunRemoteDataSource.getNewBikunChannel();
   }
 }

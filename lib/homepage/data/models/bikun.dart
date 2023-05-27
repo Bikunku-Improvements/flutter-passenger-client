@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class Bikun {
+import 'package:equatable/equatable.dart';
+
+class Bikun extends Equatable {
   final int id;
   final int number;
   final double lat;
@@ -8,7 +10,7 @@ class Bikun {
   final bool isActive;
   final DateTime timestamp;
 
-  Bikun({
+  const Bikun({
     required this.id,
     required this.number,
     required this.lat,
@@ -45,4 +47,7 @@ class Bikun {
 
   @override
   String toString() => toMap().toString();
+
+  @override
+  List<Object?> get props => [id, number, lat, long];
 }

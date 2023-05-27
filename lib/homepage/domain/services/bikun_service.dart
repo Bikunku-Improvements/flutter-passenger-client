@@ -6,8 +6,8 @@ class BikunService {
 
   BikunService(this._repository);
 
-  Stream<List<Bikun>> getAllBikun() {
-    return _repository.getAllBikun();
+  Stream<Bikun> getAllBikun() {
+    return _repository.getNewBikun();
   }
 
   Future<void> closeBikunkuStream() {

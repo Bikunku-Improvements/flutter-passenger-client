@@ -14,7 +14,7 @@ class BikunRemoteDataSourceGrpcImpl implements BikunRemoteDataSource {
   }
 
   @override
-  Stream<List<Bikun>> getListAllBikunChannel() async* {
+  Stream<Bikun> getNewBikunChannel() async* {
     _bikunkuGrpcChannel = ClientChannel(base_url.grpcBaseUrl,
         port: 80,
         options:
@@ -22,19 +22,15 @@ class BikunRemoteDataSourceGrpcImpl implements BikunRemoteDataSource {
 
     LocationClient stub = LocationClient(_bikunkuGrpcChannel);
 
-    Map<int, Bikun> bikunMap = {};
-
     await for (var location
         in stub.subscribeLocation(SubscribeLocationRequest.fromJson("{}"))) {
-      bikunMap[location.busId.toInt()] = Bikun(
+      yield* Stream.value(Bikun(
           id: location.busId.toInt(),
           isActive: location.isActive,
           lat: location.lat,
           long: location.long,
           number: location.number.toInt(),
-          timestamp: DateTime.parse(location.createdAt));
-
-      yield* Stream.value(bikunMap.values.toList());
+          timestamp: DateTime.parse(location.createdAt)));
     }
   }
 }
