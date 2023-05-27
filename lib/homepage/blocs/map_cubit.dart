@@ -30,17 +30,27 @@ class MapCubit extends Cubit<MapState> {
   MapCubit(this._mapService, this._bikunService) : super(const MapState()) {
     _streamSubscription = _bikunService.getAllBikun().listen((bikun) async {
       final markerIdString = "bikun-with-${bikun.id}";
+      final markers = Map<String, Marker>.from(state.markers);
+      final oldMarker = markers[markerIdString];
+
+      BitmapDescriptor markerIcon;
+
+      if (oldMarker == null) {
+        markerIcon = await bikun_draw.getMarkerIcon(
+            bikun.isActive
+                ? "assets/icons/bikun-active.png"
+                : "assets/icons/bikun-inactive.png",
+            bikun.isActive ? bikun.number.toString() : "x",
+            bikun.isActive ? AppColors.primaryBlue : AppColors.primaryRed);
+      } else {
+        markerIcon = oldMarker.icon;
+      }
+
       final newBikunMarker = Marker(
           markerId: MarkerId(markerIdString),
           position: LatLng(bikun.lat, bikun.long),
-          icon: await bikun_draw.getMarkerIcon(
-              bikun.isActive
-                  ? "assets/icons/bikun-active.png"
-                  : "assets/icons/bikun-inactive.png",
-              bikun.isActive ? bikun.number.toString() : "x",
-              bikun.isActive ? AppColors.primaryBlue : AppColors.primaryRed));
+          icon: markerIcon);
 
-      final markers = Map<String, Marker>.from(state.markers);
       markers[markerIdString] = newBikunMarker;
       emit(state.copyWith(markers: markers));
     });
