@@ -9,11 +9,11 @@ class BikunRepositoryImpl implements BikunRepository {
 
   @override
   Future<void> closeBikunkuStream() async {
-    _bikunRemoteDataSource.closeBikunkuWebSocketChannel();
+    _bikunRemoteDataSource.close();
   }
 
   @override
-  Stream<List<Bikun>> getAllBikun() {
-    return _bikunRemoteDataSource.getListAllBikunChannel();
+  Stream<Bikun> getNewBikun() {
+    return _bikunRemoteDataSource.getNewBikunChannel();
   }
 }
